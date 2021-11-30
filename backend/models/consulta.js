@@ -1,4 +1,8 @@
 const mongoose = require('mongoose');
+const Consultorio = require('./consultorio');
+const Medico = require('./medico');
+const Paciente = require('./paciente');
+
 
 const eventSchema = mongoose.Schema({
     numero_turno: {
@@ -8,32 +12,11 @@ const eventSchema = mongoose.Schema({
             'Falta el turno'
         ],
     },
-    consultorio: {
-        type: String,
-        maxlength: 100,
-        required: [
-            true,
-            'Falta el consultorio'
-        ],
-    },
-    medico: {
-        type: String,
-        maxlength: 150,
-        required: [
-            true,
-            'Falta el medico'
-        ],
-    },
+    consultorio: Consultorio,
+    medico: Medico,
     direccion: {
         type: String,
         maxlength: 300,
-        required: [
-            false,
-        ],
-    },
-    telefono: {
-        type: String,
-        maxlength: 100,
         required: [
             false,
         ],
@@ -46,6 +29,23 @@ const eventSchema = mongoose.Schema({
             'Falta la prioridad'
         ],
     },
+    fecha: {
+        type: String,
+        maxlength: 100,
+        required: [
+            true,
+            'Falta la fecha'
+        ],
+    },
+    hora: {
+        type: String,
+        maxlength: 100,
+        required: [
+            true,
+            'Falta la hora'
+        ],
+    },
+    paciente: Paciente
 }, {collection: 'consulta'});
 
 module.exports = mongoose.model('consulta', eventSchema);
