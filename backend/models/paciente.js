@@ -24,6 +24,8 @@ const eventSchema = mongoose.Schema({
             'Falta la edad'
         ],
     },
-}, {collection: 'paciente'});
+}, {collection: 'Pacientes'});
 
-module.exports = mongoose.model('paciente', eventSchema);
+const Paciente = mongoose.model('Paciente', eventSchema);
+module.exports.Paciente = Paciente;
+module.exports.pacienteSchema = eventSchema;

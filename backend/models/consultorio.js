@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Medico = require('./medico');
+//const { medicoSchema } = require('./medico');
 
 const eventSchema = mongoose.Schema({
     direccion: {
@@ -26,7 +26,10 @@ const eventSchema = mongoose.Schema({
             'Falta el nombre'
         ],
     },
-    medicos: [ Medico ],
+    medicos: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Medico"
+    }],
     capacidad: {
         type: Number,
         required: [
@@ -35,6 +38,10 @@ const eventSchema = mongoose.Schema({
         ],
     },
 
-}, {collection: 'consultorio'});
+}, {collection: 'Consultorios'});
 
-module.exports = mongoose.model('consultorio', eventSchema);
+//module.exports.consultorioSchema = eventSchema;
+
+const Consultorio = mongoose.model('Consultorio', eventSchema);
+module.exports.Consultorio = Consultorio;
+module.exports.consultorioSchema = eventSchema;

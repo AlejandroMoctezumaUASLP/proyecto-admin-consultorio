@@ -3,14 +3,15 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
-const Consulta = require('./models/consulta');
-
-const { pacienteController } = require('./controllers');
+const { pacienteController, medicoController, consultorioController, consultaController } = require('./controllers');
 
 app.use(bodyParser());
-
 app.use(cors());
 
+// Se crea el arreglo de rutas
+const router = express.Router();
+
+// Se inicia la conexión con la BD en Mongo
 mongoose
   .connect(
     "mongodb://127.0.0.1:27017/doctores"
@@ -22,99 +23,38 @@ mongoose
     console.log("Connection failed!");
   });
 
-app.get('/', (req, res) => {
-  res.json({ text: 'Hola', });
-});
- 
-const router = app.router();
+// CRUD de Pacientes
+router.post("/pacientes", pacienteController.createPatient);
+router.get("/pacientes/:id", pacienteController.findPatient);
+router.get("/pacientes", pacienteController.getPatients);
+router.put("/pacientes/:id", pacienteController.updatePatient);
+router.delete("/pacientes/:id", pacienteController.deletePatient);
 
-router.post("/pacientes", pacienteController);
+// CRUD de Medico
+router.post("/medicos", medicoController.createMedic);
+router.get("/medicos/:id", medicoController.findMedic);
+router.get("/medicos", medicoController.getMedics);
+router.put("/medicos/:id", medicoController.updateMedic);
+router.delete("/medicos/:id", medicoController.deleteMedic);
 
+// CRUD de Consultorio
+router.post("/consultorios", consultorioController.createOffice);
+router.get("/consultorios/:id", consultorioController.findOffice);
+router.get("/consultorios", consultorioController.getOffices);
+router.put("/consultorios/:id", consultorioController.updateOffice);
+router.delete("/consultorios/:id", consultorioController.deleteOffice);
 
+// CRUD de Consulta
+router.post("/consultas", consultaController.createAppointment);
+router.get("/consultas/:id", consultaController.findAppointment);
+router.get("/consultas", consultaController.getAppointments);
+router.put("/consultas/:id", consultaController.updateAppointment);
+router.delete("/consultas/:id", consultaController.deleteAppointment);
 
-app.use("/api", router);
+// Se pasa router al api
+app.use('/api',router);
 
-/****************
- * 
- * CRUD CONSULTA
- * 
- ***************/
-
-// app.get('/consultas/:id', async (req, res) => {
-//   const id = req.params.id;
-//   const result = await Consulta.find({ _id: mongoose.Types.ObjectId(id) });
-//   res.status(200).json({
-//     result
-//   });
-// });
-
-// app.get('/consultas', async (req, res) => {
-//   const result = await Consulta.find({});
-
-//   res.status(200).json({
-//     result
-//   });
-// });
-
-// app.post('/consultas', async (req, res) => {
-//   const {
-//     numero_turno,
-//     consultorio,
-//     medico,
-//     direccion,
-//     telefono,
-//     prioridad
-//   } = req.body;
-
-//   let consulta = new Consulta({
-//     numero_turno,
-//     consultorio,
-//     medico,
-//     direccion,
-//     telefono,
-//     prioridad
-//   });
-
-//   const result = await consulta.save();
-
-//   res.status(201).json({
-//     result
-//   });
-// });
-
-// app.put('/consultas/:id', async (req, res) => {
-//   const {
-//     numero_turno,
-//     consultorio,
-//     medico,
-//     direccion,
-//     telefono,
-//     prioridad,
-//   } = req.body;
-
-//   const id = req.params.id;
-//   const result = await Consulta.findByIdAndUpdate({ _id: id }, {
-//     numero_turno,
-//     consultorio,
-//     medico,
-//     direccion,
-//     telefono,
-//     prioridad
-//   });
-//   res.status(200).json({
-//     result
-//   });
-// });
-
-// app.delete('/consultas/:id', async (req, res) => {
-//   const id = req.params.id;
-//   const result = await Consulta.remove({ _id: mongoose.Types.ObjectId(id) });
-//   res.status(200).json({
-//     result
-//   });
-// });
-
-// Servidor Puerto 8000
+// Se inicia el servicio en el puerto 8000
 app.listen(8000, () => {
   console.log('Listening port: 8000');
 });

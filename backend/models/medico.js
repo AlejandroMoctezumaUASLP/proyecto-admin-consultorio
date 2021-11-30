@@ -25,6 +25,10 @@ const eventSchema = mongoose.Schema({
             'Falta el nombre'
         ],
     },
-}, {collection: 'medico'});
+}, {collection: 'Medicos'});
 
-module.exports = mongoose.model('medico', eventSchema);
+//module.exports.medicoSchema = eventSchema;
+
+const Medico = mongoose.model('Medico', eventSchema);
+module.exports.Medico = Medico;
+module.exports.medicoSchema = eventSchema;
