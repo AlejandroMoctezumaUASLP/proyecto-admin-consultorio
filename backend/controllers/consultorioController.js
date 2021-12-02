@@ -26,14 +26,24 @@ module.exports = {
     },
     findOffice: async (req, res) => {
         const id = req.params.id;
-        const result = await consultorioService.getById(id);
+        const include = req.query["include"];
+        let arrayInclude = "";
+        if (include)
+            arrayInclude = include.replaceAll("."," ");
+
+        const result = await consultorioService.getById(id, arrayInclude);
 
         res.status(200).json({
             result
         });
     },
     getOffices: async (req, res) => {
-        const result = await consultorioService.getAll();
+        const include = req.query["include"];
+        let arrayInclude = "";
+        if (include)
+            arrayInclude = include.replaceAll("."," ");
+        
+        const result = await consultorioService.getAll(arrayInclude);
 
         res.status(200).json({
             result

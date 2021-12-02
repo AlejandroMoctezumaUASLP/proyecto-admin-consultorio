@@ -31,18 +31,24 @@ module.exports = {
     },
     findAppointment: async (req, res) => {
         const id = req.params.id;
-        const include = req.params.include
-        include = include.split(",")
-        const result = await consultaService.getById({_id: id}, include);
+        const include = req.query["include"];
+        let arrayInclude = "";
+        if (include)
+            arrayInclude = include.replaceAll("."," ");
+
+        const result = await consultaService.getById({_id: id}, arrayInclude);
 
         res.status(200).json({
             result
         });
     },
     getAppointments: async (req, res) => {
-        const include = req.params.include
-        include = include.split(",")
-        const result = await consultaService.getAll(include);
+        const include = req.query["include"];
+        let arrayInclude = "";
+        if (include)
+            arrayInclude = include.replaceAll("."," ");
+
+        const result = await consultaService.getAll(arrayInclude);
 
         res.status(200).json({
             result
