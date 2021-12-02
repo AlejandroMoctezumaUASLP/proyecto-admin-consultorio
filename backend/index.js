@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
 const { pacienteController, medicoController, consultorioController, consultaController } = require('./controllers');
+require('dotenv').config()
 
 app.use(bodyParser());
 app.use(cors());
@@ -14,7 +15,8 @@ const router = express.Router();
 // Se inicia la conexión con la BD en Mongo
 mongoose
   .connect(
-    "mongodb://127.0.0.1:27017/doctores"
+    //"mongodb://127.0.0.1:27017/doctores"
+    process.env.MONGO_CONNECTION_STRING
   )
   .then(() => {
     console.log("Connected to database!");
