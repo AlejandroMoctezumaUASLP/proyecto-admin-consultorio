@@ -14,7 +14,8 @@ const router = express.Router();
 // Se inicia la conexión con la BD en Mongo
 mongoose
   .connect(
-    "mongodb://127.0.0.1:27017/doctores"
+    //"mongodb://127.0.0.1:27017/doctores"
+    //"mongodb+srv://ElMocte:ElChiludo@cluster0.0ur2c.mongodb.net/doctores?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("Connected to database!");
