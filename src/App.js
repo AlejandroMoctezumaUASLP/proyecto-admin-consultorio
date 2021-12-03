@@ -1,31 +1,20 @@
 import logo from './logo.svg';
 import styles from './App.module.css';
 import { Header, MDrawer, CardItem } from './components';
+import { Routes, Route, Link } from "react-router-dom";
+import { ConsultorioPage, MainPage, MedicoPage } from './pages';
+import { FooterComponent } from './components/Footer/FooterComponent';
 
 function App() {
-  const props = {
-    "numero_turno": 1,
-    "consultorio": "Dr. Simi",
-    "medico": "Dr. Angel",
-    "direccion": "Hogares Ferrocariles, Calle 2096",
-    "telefono": "4444444444",
-    "prioridad": "Urgente"
-  }
   return (
     <div>
       <Header></Header>
-      <div className={`${styles.listContainer}`}>
-      {
-        Array.from(Array(12).keys()).map((item, key) => (
-          <CardItem 
-            className={`${styles.listItem}`} 
-            key={key} 
-            {...props}
-          >
-          </CardItem>
-        ))
-      }
-      </div>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/medicos" element={<MedicoPage />} />
+        <Route path="/consultorios" element={<ConsultorioPage />} />
+      </Routes>
+      <FooterComponent />
     </div>
   );
 }
