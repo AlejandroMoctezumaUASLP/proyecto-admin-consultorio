@@ -2,12 +2,7 @@ import React from "react";
 import { Modal } from "./Modal";
 import styles from "./FormStyle.module.css";
 
-
-const style = {
-  paddingBottom: "2rem",
-};
-
-export const DoctorModal = (props) => {
+export const FormModal = (props) => {
   const { titulo, isOpen, changeModalState, children } = props;
 
   return (

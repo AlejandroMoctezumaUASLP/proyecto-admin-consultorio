@@ -1,1 +1,2 @@
-export * from './Modal'
+export * from './FormModal'
+export * from './Modal';

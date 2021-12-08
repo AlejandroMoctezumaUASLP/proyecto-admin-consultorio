@@ -1,6 +1,6 @@
 import React from 'react';
-import { Modal as ModalMUI } from "@mui/material";
 import Box from "@mui/material/Box";
+import { Modal as ModalMUI } from "@mui/material";
 
 const style = {
     position: 'absolute',

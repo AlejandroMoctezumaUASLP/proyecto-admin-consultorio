@@ -1,9 +1,6 @@
-import logo from './logo.svg';
-import styles from './App.module.css';
-import { Header, MDrawer, CardItem } from './components';
-import { Routes, Route, Link } from "react-router-dom";
-import { ConsultorioPage, MainPage, MedicoPage } from './pages';
-import { FooterComponent } from './components/Footer/FooterComponent';
+import { Header, FooterComponent } from './components';
+import { Routes, Route } from "react-router-dom";
+import { ConsultorioPage, ConsultasPage, MainPage, MedicoPage } from './pages';
 
 function App() {
   return (
@@ -13,6 +10,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/medicos" element={<MedicoPage />} />
         <Route path="/consultorios" element={<ConsultorioPage />} />
+        <Route path="/consultas" element={<ConsultasPage />} />
       </Routes>
       <FooterComponent />
     </div>

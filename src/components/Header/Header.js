@@ -1,27 +1,22 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
+import Button from "@mui/material/Button";
+import { CardMedia } from "@mui/material";
+import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import { Link } from "../Link";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-//import { Link } from "react-router-dom";
-import { Link } from "../Link";
-import { CardMedia } from "@mui/material";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 const routes = [ 
   {
-    link: "/",
-    name: "Inicio"
-  },
-  {
-    link: "/consultorio",
+    link: "/consultorios",
     name: "Consultorios"
   },
   {
@@ -29,7 +24,7 @@ const routes = [
     name: "Medicos"
   },
   {
-    link: "/",
+    link: "/consultas",
     name: "Consultas"
   }
 ]
@@ -68,8 +63,8 @@ export const Header = () => {
             <Link link="/">
               <CardMedia
                 component="img"
-                height="194"
-                image="Corpus.png"
+                height="80"
+                image="Logo.png"
                 alt="Paella dish"
               />
             </Link>

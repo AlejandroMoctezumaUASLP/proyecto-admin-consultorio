@@ -1,6 +1,5 @@
-import { Box } from "@mui/system";
-import Container from "@mui/material/Container";
 import * as React from "react";
+import Container from "@mui/material/Container";
 
 export const FooterComponent = () => {
   return (

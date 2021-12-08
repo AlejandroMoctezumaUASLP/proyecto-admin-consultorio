@@ -13,9 +13,9 @@ import { red } from "@mui/material/colors";
 import { useContext } from 'react';
 import Typography from "@mui/material/Typography";
 
-export function CardDoctor(props) {
+export function CardConsultorio(props) {
   // Se asignan los nombres de las variables a la Card por medio de props
-  const { className, especialidad, telefono, nombre, itemId } = props;
+  const { className, direccion, telefono, nombre, medicos, capacidad, itemId } = props;
 
   // Estados de modales
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -54,7 +54,7 @@ export function CardDoctor(props) {
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              {nombre[4]}
+              {nombre[0]}
             </Avatar>
           }
           action={
@@ -84,6 +84,7 @@ export function CardDoctor(props) {
             </div>
           }
           title={nombre}
+          subheader={"Capacidad: " + capacidad + " pacientes"}
         />
         <CardMedia
           component="img"
@@ -93,10 +94,13 @@ export function CardDoctor(props) {
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            Especialidad: {especialidad}
+            Direccion: {direccion}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Telefono: {telefono}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            No. de Medicos: {medicos.length}
           </Typography>
         </CardContent>
       </Card>

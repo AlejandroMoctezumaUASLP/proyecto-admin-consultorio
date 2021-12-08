@@ -5,25 +5,19 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
-import { itemContext } from '../../pages';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { red } from "@mui/material/colors";
-import { useContext } from 'react';
 import Typography from "@mui/material/Typography";
 
-export function CardDoctor(props) {
+export function CardConsulta(props) {
   // Se asignan los nombres de las variables a la Card por medio de props
-  const { className, especialidad, telefono, nombre, itemId } = props;
+  const { className, numero_turno, consultorio, medico, prioridad, fecha, hora, paciente } = props;
 
   // Estados de modales
   const [modalOpen, setModalOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-
-  // Estados de contextos
-  const { itemIndex , setItemIndex } = useContext(itemContext);
-  const { actionCard , setActionCard } = useContext(itemContext);
 
   const open = Boolean(anchorEl);
 
@@ -36,15 +30,11 @@ export function CardDoctor(props) {
 
   const updateModal = () => {
     setModalOpen(!modalOpen);
-    setItemIndex(itemId);
-    setActionCard("UPDATE");
     setAnchorEl(null);
   };
 
   const deleteModal = () => {
     setModalOpen(!modalOpen);
-    setItemIndex(itemId);
-    setActionCard("DELETE");
     setAnchorEl(null);
   };
 
@@ -54,7 +44,7 @@ export function CardDoctor(props) {
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              {nombre[4]}
+              {paciente.nombre[0]}
             </Avatar>
           }
           action={
@@ -83,7 +73,8 @@ export function CardDoctor(props) {
               </Menu>
             </div>
           }
-          title={nombre}
+          title={consultorio.nombre}
+          subheader={"Paciente: " + paciente.nombre + " [Turno: " + numero_turno + " ]"}
         />
         <CardMedia
           component="img"
@@ -93,10 +84,16 @@ export function CardDoctor(props) {
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            Especialidad: {especialidad}
+            Medico: {medico.nombre}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Telefono: {telefono}
+            Fecha: {fecha}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Hora: {hora}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Prioridad: {prioridad}
           </Typography>
         </CardContent>
       </Card>

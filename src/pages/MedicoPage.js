@@ -1,12 +1,10 @@
-import React from "react";
-import { CardDoctor, SubmitButton } from "../components";
-import styles from "../App.module.css";
-import { useState, useEffect } from "react";
-import { DoctorModal } from "../components/Modal/DoctorModal";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
+import { CardDoctor, FormModal, SubmitButton } from "../components";
 import { CrudMedicos } from "../utils";
-import { TextField } from "@mui/material";
 import { itemContext } from "./itemContext";
+import styles from "../App.module.css";
+import { TextField } from "@mui/material";
 
 export const MedicoPage = () => {
   // Datos a mostrar y modales
@@ -30,19 +28,18 @@ export const MedicoPage = () => {
     e.preventDefault();
     const body = { nombre, telefono, especialidad };
     let res = "";
-    console.log(itemIndex);
 
-    if (itemIndex === 0) {
-      console.log("Creando registro");
+    if (itemIndex === 0)
       res = await CrudMedicos.createMedico(JSON.stringify(body));
-    } else {
-      console.log("Editando registro");
+    else
       res = await CrudMedicos.updateMedico(JSON.stringify(body),itemIndex);
-    }
 
-    if (res != "") {
-      //const auxMedicos = medicos;
-      //setMedicos(medicos.append(res.result));
+    if (res !== "") {
+      // Se limpian los valores
+      setNombre("");
+      setTelefono("");
+      setEspecialidad("");
+
       setLoading(true);
     }
 
@@ -81,21 +78,37 @@ export const MedicoPage = () => {
       }
     }
 
+    function actualizarElemento() {
+      // Se actualizan los valores de la forma
+      const elemento = medicos.find(
+        (elemento) => elemento._id === itemIndex
+      );
+      setNombre(elemento.nombre);
+      setTelefono(elemento.telefono);
+      setEspecialidad(elemento.especialidad);
+
+      // Se abre la modal
+      changeModalState();
+    }
+
     // Se detecta si se quiere actualizar el elemento o eliminar
-    if (itemIndex != 0 && actionCard === "UPDATE") changeModalState();
-    else if (itemIndex != 0 && actionCard === "DELETE") borrarElemento();
+    if (itemIndex !== 0 && actionCard === "UPDATE") actualizarElemento();
+    else if (itemIndex !== 0 && actionCard === "DELETE") borrarElemento();
   }, [itemIndex, actionCard]);
 
   // Se abre o cierra el modal
   const changeModalState = () => {
     setModalOpen(!modalOpen);
-    console.log("ID: ", itemIndex);
-    console.log("ACCIÓN: ", actionCard);
-    if(!modalOpen)
-      setActionCard("NADA");
+    if(!modalOpen) setActionCard("NADA");
   };
 
   const createModalState = () => {
+    //Se limpian los valores del formulario
+    setNombre("");
+    setTelefono("");
+    setEspecialidad("");
+
+    // Se actualizan valores de control
     setItemIndex(0);
     setActionCard("NADA");
     changeModalState();
@@ -106,7 +119,7 @@ export const MedicoPage = () => {
     <itemContext.Provider value={value}>
       {/* Modal para la creación de Médicos */}
       <div>
-        <DoctorModal
+        <FormModal
           titulo="Crear Medico"
           isOpen={modalOpen}
           changeModalState={changeModalState}
@@ -142,7 +155,7 @@ export const MedicoPage = () => {
             sx={{ paddingBottom: "10px" }}
           />
           <SubmitButton title="Enviar" onClick={submitForm}></SubmitButton>
-        </DoctorModal>
+        </FormModal>
 
         {/* Botón para crear Médicos */}
         <div className={`${styles.flexButton}`}>
