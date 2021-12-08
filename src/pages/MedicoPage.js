@@ -6,39 +6,50 @@ import { DoctorModal } from "../components/Modal/DoctorModal";
 import Button from "@mui/material/Button";
 import { CrudMedicos } from "../utils";
 import { TextField } from "@mui/material";
-import { itemContext } from './itemContext';
+import { itemContext } from "./itemContext";
 
 export const MedicoPage = () => {
+  // Datos a mostrar y modales
   const [medicos, setMedicos] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const [itemIndex, setItemIndex] = useState(null);
-  const value = { itemIndex, setItemIndex };
+  // Contextos
+  const [itemIndex, setItemIndex] = useState(0);
+  const [actionCard, setActionCard] = useState(null);
+  const value = { itemIndex, setItemIndex, actionCard, setActionCard };
 
+  // Estados del formulario
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
   const [especialidad, setEspecialidad] = useState("");
 
+  // Formulario para crear médico.
+  // Al terminar, se recarga la página
   const submitForm = async (e) => {
     e.preventDefault();
-    console.log("Presioné el pinche botón del modal");
-
     const body = { nombre, telefono, especialidad };
-    console.log(JSON.stringify(body));
+    let res = "";
+    console.log(itemIndex);
 
-    const res = await CrudMedicos.createMedico(JSON.stringify(body));
-    console.log(res);
+    if (itemIndex === 0) {
+      console.log("Creando registro");
+      res = await CrudMedicos.createMedico(JSON.stringify(body));
+    } else {
+      console.log("Editando registro");
+      res = await CrudMedicos.updateMedico(JSON.stringify(body),itemIndex);
+    }
 
-    if (res) {
+    if (res != "") {
       //const auxMedicos = medicos;
       //setMedicos(medicos.append(res.result));
       setLoading(true);
     }
 
-    setModalOpen(!modalOpen);
+    changeModalState();
   };
 
+  // Cuando se realiza una acción, se vuelve a cargar la lista de médicos
   useEffect(() => {
     const requestOptions = {
       method: "GET",
@@ -46,6 +57,8 @@ export const MedicoPage = () => {
     };
 
     if (loading) {
+      setActionCard("NADA");
+
       fetch(
         "https://guarded-caverns-69109.herokuapp.com/api/medicos",
         requestOptions
@@ -57,16 +70,41 @@ export const MedicoPage = () => {
     }
   }, [loading]);
 
+  // Cuando se detecta un nuevo index, se checa si se hace la acción de borrar
   useEffect(() => {
-    console.log(itemIndex);
-  }, [itemIndex]);
+    async function borrarElemento() {
+      const res = await CrudMedicos.deleteMedico(itemIndex);
 
+      if (res) {
+        setItemIndex(0);
+        setLoading(true);
+      }
+    }
+
+    // Se detecta si se quiere actualizar el elemento o eliminar
+    if (itemIndex != 0 && actionCard === "UPDATE") changeModalState();
+    else if (itemIndex != 0 && actionCard === "DELETE") borrarElemento();
+  }, [itemIndex, actionCard]);
+
+  // Se abre o cierra el modal
   const changeModalState = () => {
     setModalOpen(!modalOpen);
+    console.log("ID: ", itemIndex);
+    console.log("ACCIÓN: ", actionCard);
+    if(!modalOpen)
+      setActionCard("NADA");
   };
 
+  const createModalState = () => {
+    setItemIndex(0);
+    setActionCard("NADA");
+    changeModalState();
+  }
+
   return (
+    // La pantalla está envuelva en un Context
     <itemContext.Provider value={value}>
+      {/* Modal para la creación de Médicos */}
       <div>
         <DoctorModal
           titulo="Crear Medico"
@@ -106,18 +144,20 @@ export const MedicoPage = () => {
           <SubmitButton title="Enviar" onClick={submitForm}></SubmitButton>
         </DoctorModal>
 
+        {/* Botón para crear Médicos */}
         <div className={`${styles.flexButton}`}>
           <Button
             sx={{
               backgroundColor: "#CACACA",
               padding: "10px",
             }}
-            onClick={changeModalState}
+            onClick={createModalState}
           >
             Crear Médico
           </Button>
         </div>
 
+        {/* Contenedor con la lista de médicos */}
         <div className={`${styles.listContainer}`}>
           {medicos &&
             medicos.map((item, key) => (

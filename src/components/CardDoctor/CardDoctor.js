@@ -22,13 +22,17 @@ import { useContext } from 'react';
 import { itemContext } from '../../pages/itemContext';
 
 export function CardDoctor(props) {
+  // Se asignan los nombres de las variables a la Card por medio de props
   const { className, especialidad, telefono, nombre, itemId } = props;
 
+  // Estados de modales
   const [expanded, setExpanded] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  // Estados de contextos
   const { itemIndex , setItemIndex } = useContext(itemContext);
+  const { actionCard , setActionCard } = useContext(itemContext);
 
   const open = Boolean(anchorEl);
 
@@ -43,9 +47,18 @@ export function CardDoctor(props) {
     setExpanded(!expanded);
   };
 
-  const openModal = () => {
+  const updateModal = () => {
     setModalOpen(!modalOpen);
     setItemIndex(itemId);
+    setActionCard("UPDATE");
+    setAnchorEl(null);
+  };
+
+  const deleteModal = () => {
+    setModalOpen(!modalOpen);
+    setItemIndex(itemId);
+    setActionCard("DELETE");
+    setAnchorEl(null);
   };
 
   const closeModal = () => {
@@ -82,9 +95,8 @@ export function CardDoctor(props) {
                   "aria-labelledby": "basic-button",
                 }}
               >
-                <MenuItem onClick={openModal}>Detalles</MenuItem>
-                <MenuItem onClick={handleClose}>Editar</MenuItem>
-                <MenuItem onClick={handleClose}>Eliminar</MenuItem>
+                <MenuItem onClick={updateModal}>Editar</MenuItem>
+                <MenuItem onClick={deleteModal}>Eliminar</MenuItem>
               </Menu>
             </div>
           }
