@@ -13,6 +13,26 @@ import { red } from "@mui/material/colors";
 import { useContext } from 'react';
 import Typography from "@mui/material/Typography";
 
+/**
+ * Card que representa la información y los métodos disponibles para un consultorio
+ * @member
+ * @property {className} className Define el estilo del contenedor principal de la card
+ * @property {string} direccion Direccion del Consultorio
+ * @property {string} telefono Teléfono del Consultorio
+ * @property {string} nombre Nombre del Consultorio
+ * @property {array} medicos Arreglo con los IDs de los Medicos
+ * @property {number} capacidad Capacidad del Consultorio
+ * @property {number} itemId ID del Médico
+ * @example
+ * {consultorios && consultorios.map((item, key) => (
+ *   <CardConsultorio
+ *     className={estilo}
+ *     key={key}
+ *     itemId={item._id}
+ *     {...item}
+ *   ></CardConsultor>
+ * ))}
+ */
 export function CardConsultorio(props) {
   // Se asignan los nombres de las variables a la Card por medio de props
   const { className, direccion, telefono, nombre, medicos, capacidad, itemId } = props;

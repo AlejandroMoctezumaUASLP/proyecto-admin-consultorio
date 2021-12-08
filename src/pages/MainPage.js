@@ -1,6 +1,10 @@
 import React from 'react'
 import styles from './PagesStyle.module.css'
 
+/**
+ * Página de inicio del panel de Administrador. Se puede llegar también al presionar el logo
+ * @member
+ */
 export const MainPage = () => {
     return (
     <div className={styles.containerMain}>

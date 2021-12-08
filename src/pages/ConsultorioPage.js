@@ -6,6 +6,24 @@ import { itemContext } from "./itemContext";
 import styles from "../App.module.css";
 import { TextField } from "@mui/material";
 
+/**
+ * Página donde se pueden consultar y modificar los consultorios de la BD.
+ * 
+ * Se hace uso de un contexto para pasar información entre las cards de los consultorios
+ * y la página principal.
+ * 
+ * El código se estructura de la sig. forma:
+ * <ul style="list-style: none;">
+ *  <li> Estados de Página
+ *  <li> Contextos
+ *  <li> Estados de Formulario
+ *  <li> Funciones de la Página
+ *  <li> UseEffects (Carga Inicial, Recarga, Contexto regresó algo)
+ *  <li> Estados del Modal
+ *  <li> Componente (Envuelto en Contexto)
+ * </ul>
+ * @member
+ */
 export const ConsultorioPage = () => {
   // Datos a mostrar y modales
   const [listaMedicos, setListaMedicos] = useState([]);

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/ConsultorioPage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/ConsultorioPage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
+import { CardConsultorio, DropdownForm, FormModal, SubmitButton } from "../components";
+import { CrudConsultorios } from "../utils";
+import { itemContext } from "./itemContext";
+import styles from "../App.module.css";
+import { TextField } from "@mui/material";
+
+/**
+ * Página donde se pueden consultar y modificar los consultorios de la BD.
+ * 
+ * Se hace uso de un contexto para pasar información entre las cards de los consultorios
+ * y la página principal.
+ * 
+ * El código se estructura de la sig. forma:
+ * &lt;ul style="list-style: none;">
+ *  &lt;li> Estados de Página
+ *  &lt;li> Contextos
+ *  &lt;li> Estados de Formulario
+ *  &lt;li> Funciones de la Página
+ *  &lt;li> UseEffects (Carga Inicial, Recarga, Contexto regresó algo)
+ *  &lt;li> Estados del Modal
+ *  &lt;li> Componente (Envuelto en Contexto)
+ * &lt;/ul>
+ * @member
+ */
+export const ConsultorioPage = () => {
+  // Datos a mostrar y modales
+  const [listaMedicos, setListaMedicos] = useState([]);
+  const [consultorios, setConsultorios] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Contextos
+  const [itemIndex, setItemIndex] = useState(0);
+  const [actionCard, setActionCard] = useState(null);
+  const value = { itemIndex, setItemIndex, actionCard, setActionCard };
+
+  // Estados del formulario
+  const [direccion, setDireccion] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [medicos, setMedicos] = useState([]);
+  const [capacidad, setCapacidad] = useState(0);
+
+  // Formulario para crear consultorio.
+  // Al terminar, se recarga la página
+  const submitForm = async (e) => {
+    e.preventDefault();
+    const body = { direccion, telefono, nombre, medicos, capacidad };
+    let res = "";
+
+    if (itemIndex === 0)
+      res = await CrudConsultorios.createConsultorio(JSON.stringify(body));
+    else
+      res = await CrudConsultorios.updateConsultorio(JSON.stringify(body),itemIndex);
+
+    if (res !== "") {
+      // Se limpian los valores
+      setDireccion("");
+      setTelefono("");
+      setNombre("");
+      setMedicos([]);
+      setCapacidad(0);
+
+      setLoading(true);
+    }
+
+    changeModalState();
+  };
+
+  // Cuando se carga por primera vez la página, se carga una lista de médicos
+  useEffect(() => {
+    async function obtenerMedicos() {
+      const requestOptions = {
+        method: "GET",
+        redirect: "follow",
+      };
+
+      fetch(
+        "https://guarded-caverns-69109.herokuapp.com/api/medicos",
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => setListaMedicos(result.result))
+        .catch((error) => console.log("error", error));
+    }
+
+    obtenerMedicos();
+  }, []);
+
+  // Cuando se realiza una acción, se vuelve a cargar la lista de consultorios
+  useEffect(() => {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    if (loading) {
+      setActionCard("NADA");
+
+      fetch(
+        "https://guarded-caverns-69109.herokuapp.com/api/consultorios",
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => setConsultorios(result.result))
+        .catch((error) => console.log("error", error));
+      setLoading(false);
+    }
+  }, [loading]);
+
+  // Cuando se detecta un nuevo index, se checa si se hace la acción de borrar
+  useEffect(() => {
+    async function borrarElemento() {
+      const res = await CrudConsultorios.deleteConsultorio(itemIndex);
+
+      if (res) {
+        setItemIndex(0);
+        setLoading(true);
+      }
+    }
+
+    function actualizarElemento() {
+      // Se actualizan los valores de la forma
+      const elemento = consultorios.find(
+        (elemento) => elemento._id === itemIndex
+      );
+      setDireccion(elemento.direccion);
+      setTelefono(elemento.telefono);
+      setNombre(elemento.nombre);
+      setMedicos(elemento.medicos);
+      setCapacidad(elemento.capacidad);
+
+      // Se abre la modal
+      changeModalState();
+    }
+
+    // Se detecta si se quiere actualizar el elemento o eliminar
+    if (itemIndex !== 0 &amp;&amp; actionCard === "UPDATE") actualizarElemento();
+    else if (itemIndex !== 0 &amp;&amp; actionCard === "DELETE") borrarElemento();
+  }, [itemIndex, actionCard]);
+
+  // Se abre o cierra el modal
+  const changeModalState = () => {
+    setModalOpen(!modalOpen);
+    if (!modalOpen) setActionCard("NADA");
+  };
+
+  const createModalState = () => {
+    //Se limpian los valores del formulario
+    setDireccion("");
+    setTelefono("");
+    setNombre("");
+    setMedicos([]);
+    setCapacidad(0);
+
+    // Se actualizan valores de control
+    setItemIndex(0);
+    setActionCard("NADA");
+    changeModalState();
+  };
+
+  return (
+    // La pantalla está envuelva en un Context
+    &lt;itemContext.Provider value={value}>
+      {/* Modal para la creación de Consultorios */}
+      &lt;div>
+        &lt;FormModal
+          titulo="Datos de Consultorio"
+          isOpen={modalOpen}
+          changeModalState={changeModalState}
+        >
+          &lt;TextField
+            required
+            id="outlined-required"
+            label="Nombre"
+            value={nombre}
+            onChange={(event) => {
+              setNombre(event.target.value);
+            }}
+            sx={{ paddingBottom: "10px" }}
+          />
+          &lt;TextField
+            required
+            id="outlined-required"
+            label="Capacidad"
+            value={capacidad}
+            onChange={(event) => {
+              setCapacidad(event.target.value);
+            }}
+            sx={{ paddingBottom: "10px" }}
+          />
+          &lt;TextField
+            required
+            id="outlined-required"
+            label="Direccion"
+            value={direccion}
+            onChange={(event) => {
+              setDireccion(event.target.value);
+            }}
+            sx={{ paddingBottom: "10px" }}
+          />
+          &lt;TextField
+            required
+            id="outlined-basic"
+            label="Telefono"
+            value={telefono}
+            onChange={(event) => {
+              setTelefono(event.target.value);
+            }}
+            sx={{ paddingBottom: "10px" }}
+          />
+          &lt;DropdownForm
+            label="Medicos"
+            medicos={listaMedicos}
+            values={medicos}
+            onChangeFunction={(event) => {
+              const {
+                target: { value },
+              } = event;
+              setMedicos(
+                // On autofill we get a the stringified value.
+                typeof value === "string" ? value.split(",") : value
+              );
+            }}
+          />
+          &lt;SubmitButton title="Enviar" onClick={submitForm}>&lt;/SubmitButton>
+        &lt;/FormModal>
+
+        {/* Botón para crear Consultorios */}
+        &lt;div className={`${styles.flexButton}`}>
+          &lt;Button
+            sx={{
+              backgroundColor: "#CACACA",
+              padding: "10px",
+            }}
+            onClick={createModalState}
+          >
+            Crear Consultorio
+          &lt;/Button>
+        &lt;/div>
+
+        {/* Contenedor con la lista de consultorios */}
+        &lt;div className={`${styles.listContainer}`}>
+          {consultorios &amp;&amp;
+            consultorios.map((item, key) => (
+              &lt;CardConsultorio
+                className={`${styles.listItem}`}
+                key={key}
+                itemId={item._id}
+                {...item}
+              >&lt;/CardConsultorio>
+            ))}
+        &lt;/div>
+      &lt;/div>
+    &lt;/itemContext.Provider>
+  );
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#CardConsulta">CardConsulta</a></li><li><a href="global.html#CardConsultorio">CardConsultorio</a></li><li><a href="global.html#CardDoctor">CardDoctor</a></li><li><a href="global.html#ConsultasPage">ConsultasPage</a></li><li><a href="global.html#ConsultorioPage">ConsultorioPage</a></li><li><a href="global.html#CrudConsultorios">CrudConsultorios</a></li><li><a href="global.html#CrudMedicos">CrudMedicos</a></li><li><a href="global.html#DropdownForm">DropdownForm</a></li><li><a href="global.html#FooterComponent">FooterComponent</a></li><li><a href="global.html#FormModal">FormModal</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#itemContext">itemContext</a></li><li><a href="global.html#Link">Link</a></li><li><a href="global.html#MainPage">MainPage</a></li><li><a href="global.html#MDrawer">MDrawer</a></li><li><a href="global.html#MedicoPage">MedicoPage</a></li><li><a href="global.html#Modal">Modal</a></li><li><a href="global.html#SubmitButton">SubmitButton</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Dec 08 2021 14:57:12 GMT-0600 (hora estándar central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

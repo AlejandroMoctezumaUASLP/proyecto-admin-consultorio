@@ -1,3 +1,12 @@
+/**
+ * Función que implementa el CRUD para la tabla de medicos. Se implementa los sig. métodos:
+ * 
+ * <ul style="list-style: none;">
+ *  <li> createMedico
+ *  <li> deleteMedico
+ *  <li> updateMedico
+ * </ul>
+ */
 export const CrudMedicos = {
   createMedico: async (body) => {
     var myHeaders = new Headers();

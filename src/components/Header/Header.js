@@ -30,6 +30,10 @@ const routes = [
 ]
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
+/**
+ * Menú de navegación ubicado en la parte superior de la página
+ * @member
+ */
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);

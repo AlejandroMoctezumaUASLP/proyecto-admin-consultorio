@@ -1,5 +1,17 @@
 const { medicoService } = require('../services');
 
+/**
+ * Implementa los controladores de las rutas de /medicos:
+ * 
+ * <ul style="list-style: none;">
+ *  <li> createMedic: Crea un medico.
+ *  <li> findMedic: Busca en base a un ID.
+ *  <li> getMedics: Regresa todos los registros.
+ *  <li> updateMedic: Actualiza un medico.
+ *  <li> deleteMedic: Borra un medico.
+ * </ul>
+ * @exports medicoController
+ */
 module.exports = {
     createMedic: async (req, res) => {
         const {

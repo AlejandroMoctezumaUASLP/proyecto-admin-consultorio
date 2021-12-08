@@ -1,5 +1,17 @@
 const { consultorioService } = require('../services');
 
+/**
+ * Implementa los controladores de las rutas de /consultorios:
+ * 
+ * <ul style="list-style: none;">
+ *  <li> createOffice: Crea un consultorio
+ *  <li> findOffice: Busca en base a un ID. También se pueden remplazar los IDs anidados por un objeto
+ *  <li> getOffices: Regresa todos los registros. También se pueden remplazar los IDs anidados por un objeto
+ *  <li> updateOffice: Actualiza un consultorio
+ *  <li> deleteOffice: Borra un consultorio
+ * </ul>
+ * @exports consultorioController
+ */
 module.exports = {
     createOffice: async (req, res) => {
         const {

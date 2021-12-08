@@ -1,3 +1,12 @@
+/**
+ * Función que implementa el CRUD para la tabla de consultorios. Se implementa los sig. métodos:
+ * 
+ * <ul style="list-style: none;">
+ *  <li> createConsultorio
+ *  <li> deleteConsultorio 
+ *  <li> updateConsultorio
+ * </ul>
+ */
 export const CrudConsultorios = {
     createConsultorio: async (body) => {
       var myHeaders = new Headers();

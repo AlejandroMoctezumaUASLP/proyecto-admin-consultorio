@@ -1,5 +1,17 @@
 const { pacienteService } = require('../services');
 
+/**
+ * Implementa los controladores de las rutas de /pacientes:
+ * 
+ * <ul style="list-style: none;">
+ *  <li> createPatient: Crea un paciente.
+ *  <li> findPatient: Busca en base a un ID.
+ *  <li> getPatients: Regresa todos los registros.
+ *  <li> updatePatient: Actualiza un paciente.
+ *  <li> deletePatient: Borra un paciente.
+ * </ul>
+ * @exports pacienteController
+ */
 module.exports = {
     createPatient: async (req, res) => {
         const {

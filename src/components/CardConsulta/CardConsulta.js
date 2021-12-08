@@ -11,6 +11,26 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { red } from "@mui/material/colors";
 import Typography from "@mui/material/Typography";
 
+/**
+ * Card que representa la información de una consulta
+ * @member
+ * @property {className} className Define el estilo del contenedor principal de la card
+ * @property {numero_turno} numero_turno Numero de turno del paciente
+ * @property {object} consultorio Contiene la información del consultorio. También se puede obtener solo el ID
+ * @property {object} medico Contiene la información del medico. También se puede obtener solo el ID
+ * @property {string} prioridad Prioridad de la consulta
+ * @property {string} fecha Fecha de la consulta agendada
+ * @property {string} hora Hora de la consulta agendada
+ * @property {object} paciente Contiene la información del paciente. También se puede obtener solo el ID
+ * @example
+ * {consultas && consultas.map((item, key) => (
+ *   <CardConsulta
+ *     className={estilo}
+ *     key={key}
+ *     {...item}
+ *   ></CardConsulta>
+ * ))}
+ */
 export function CardConsulta(props) {
   // Se asignan los nombres de las variables a la Card por medio de props
   const { className, numero_turno, consultorio, medico, prioridad, fecha, hora, paciente } = props;

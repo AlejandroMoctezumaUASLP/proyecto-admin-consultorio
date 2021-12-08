@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/MedicoPage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/MedicoPage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
+import { CardDoctor, FormModal, SubmitButton } from "../components";
+import { CrudMedicos } from "../utils";
+import { itemContext } from "./itemContext";
+import styles from "../App.module.css";
+import { TextField } from "@mui/material";
+
+/**
+ * Página donde se pueden consultar y modificar los medicos de la BD.
+ * 
+ * Se hace uso de un contexto para pasar información entre las cards de los medicos
+ * y la página principal.
+ * 
+ * El código se estructura de la sig. forma:
+ * &lt;ul style="list-style: none;">
+ *  &lt;li> Estados de Página
+ *  &lt;li> Contextos
+ *  &lt;li> Estados de Formulario
+ *  &lt;li> Funciones de la Página
+ *  &lt;li> UseEffects (Recarga, Contexto regresó algo)
+ *  &lt;li> Estados del Modal
+ *  &lt;li> Componente (Envuelto en Contexto)
+ * &lt;/ul>
+ * @member
+ * @member
+ */
+export const MedicoPage = () => {
+  // Datos a mostrar y modales
+  const [medicos, setMedicos] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Contextos
+  const [itemIndex, setItemIndex] = useState(0);
+  const [actionCard, setActionCard] = useState(null);
+  const value = { itemIndex, setItemIndex, actionCard, setActionCard };
+
+  // Estados del formulario
+  const [nombre, setNombre] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [especialidad, setEspecialidad] = useState("");
+
+  // Formulario para crear médico.
+  // Al terminar, se recarga la página
+  const submitForm = async (e) => {
+    e.preventDefault();
+    const body = { nombre, telefono, especialidad };
+    let res = "";
+
+    if (itemIndex === 0)
+      res = await CrudMedicos.createMedico(JSON.stringify(body));
+    else
+      res = await CrudMedicos.updateMedico(JSON.stringify(body),itemIndex);
+
+    if (res !== "") {
+      // Se limpian los valores
+      setNombre("");
+      setTelefono("");
+      setEspecialidad("");
+
+      setLoading(true);
+    }
+
+    changeModalState();
+  };
+
+  // Cuando se realiza una acción, se vuelve a cargar la lista de médicos
+  useEffect(() => {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    if (loading) {
+      setActionCard("NADA");
+
+      fetch(
+        "https://guarded-caverns-69109.herokuapp.com/api/medicos",
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => setMedicos(result.result))
+        .catch((error) => console.log("error", error));
+      setLoading(false);
+    }
+  }, [loading]);
+
+  // Cuando se detecta un nuevo index, se checa si se hace la acción de borrar
+  useEffect(() => {
+    async function borrarElemento() {
+      const res = await CrudMedicos.deleteMedico(itemIndex);
+
+      if (res) {
+        setItemIndex(0);
+        setLoading(true);
+      }
+    }
+
+    function actualizarElemento() {
+      // Se actualizan los valores de la forma
+      const elemento = medicos.find(
+        (elemento) => elemento._id === itemIndex
+      );
+      setNombre(elemento.nombre);
+      setTelefono(elemento.telefono);
+      setEspecialidad(elemento.especialidad);
+
+      // Se abre la modal
+      changeModalState();
+    }
+
+    // Se detecta si se quiere actualizar el elemento o eliminar
+    if (itemIndex !== 0 &amp;&amp; actionCard === "UPDATE") actualizarElemento();
+    else if (itemIndex !== 0 &amp;&amp; actionCard === "DELETE") borrarElemento();
+  }, [itemIndex, actionCard]);
+
+  // Se abre o cierra el modal
+  const changeModalState = () => {
+    setModalOpen(!modalOpen);
+    if(!modalOpen) setActionCard("NADA");
+  };
+
+  const createModalState = () => {
+    //Se limpian los valores del formulario
+    setNombre("");
+    setTelefono("");
+    setEspecialidad("");
+
+    // Se actualizan valores de control
+    setItemIndex(0);
+    setActionCard("NADA");
+    changeModalState();
+  }
+
+  return (
+    // La pantalla está envuelva en un Context
+    &lt;itemContext.Provider value={value}>
+      {/* Modal para la creación de Médicos */}
+      &lt;div>
+        &lt;FormModal
+          titulo="Crear Medico"
+          isOpen={modalOpen}
+          changeModalState={changeModalState}
+        >
+          &lt;TextField
+            required
+            id="outlined-required"
+            label="Nombre"
+            value={nombre}
+            onChange={(event) => {
+              setNombre(event.target.value);
+            }}
+            sx={{ paddingBottom: "10px" }}
+          />
+          &lt;TextField
+            required
+            id="outlined-basic"
+            label="Telefono"
+            value={telefono}
+            onChange={(event) => {
+              setTelefono(event.target.value);
+            }}
+            sx={{ paddingBottom: "10px" }}
+          />
+          &lt;TextField
+            required
+            id="outlined-baisc"
+            label="Especialidad"
+            value={especialidad}
+            onChange={(event) => {
+              setEspecialidad(event.target.value);
+            }}
+            sx={{ paddingBottom: "10px" }}
+          />
+          &lt;SubmitButton title="Enviar" onClick={submitForm}>&lt;/SubmitButton>
+        &lt;/FormModal>
+
+        {/* Botón para crear Médicos */}
+        &lt;div className={`${styles.flexButton}`}>
+          &lt;Button
+            sx={{
+              backgroundColor: "#CACACA",
+              padding: "10px",
+            }}
+            onClick={createModalState}
+          >
+            Crear Médico
+          &lt;/Button>
+        &lt;/div>
+
+        {/* Contenedor con la lista de médicos */}
+        &lt;div className={`${styles.listContainer}`}>
+          {medicos &amp;&amp;
+            medicos.map((item, key) => (
+              &lt;CardDoctor
+                className={`${styles.listItem}`}
+                key={key}
+                itemId={item._id}
+                {...item}
+              >&lt;/CardDoctor>
+            ))}
+        &lt;/div>
+      &lt;/div>
+    &lt;/itemContext.Provider>
+  );
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#CardConsulta">CardConsulta</a></li><li><a href="global.html#CardConsultorio">CardConsultorio</a></li><li><a href="global.html#CardDoctor">CardDoctor</a></li><li><a href="global.html#ConsultasPage">ConsultasPage</a></li><li><a href="global.html#ConsultorioPage">ConsultorioPage</a></li><li><a href="global.html#CrudConsultorios">CrudConsultorios</a></li><li><a href="global.html#CrudMedicos">CrudMedicos</a></li><li><a href="global.html#DropdownForm">DropdownForm</a></li><li><a href="global.html#FooterComponent">FooterComponent</a></li><li><a href="global.html#FormModal">FormModal</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#itemContext">itemContext</a></li><li><a href="global.html#Link">Link</a></li><li><a href="global.html#MainPage">MainPage</a></li><li><a href="global.html#MDrawer">MDrawer</a></li><li><a href="global.html#MedicoPage">MedicoPage</a></li><li><a href="global.html#Modal">Modal</a></li><li><a href="global.html#SubmitButton">SubmitButton</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Dec 08 2021 14:57:12 GMT-0600 (hora estándar central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

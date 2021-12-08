@@ -6,6 +6,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styles from './Drawer.module.css';
 import Typography from '@mui/material/Typography';
 
+/**
+ * Implementación de un Drawer para la Interfaz (Sin Utilizar)
+ * @member
+ */
 export const MDrawer = () => {
     return(
         <div className={`${styles.drawerContainer}`}>

@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 
+/**
+ * Schema del Médico.
+ * 
+ * @constructor medico
+ * @property {String} especialidad Especialidad del médico.
+ * @property {String} telefono Teléfono del médico.
+ * @property {String} nombre Nombre del médico.
+ */
 const eventSchema = mongoose.Schema({
     especialidad: {
         type: String,

@@ -14,6 +14,14 @@ const style = {
     p: 4,
   };
 
+/**
+ * Componente de modal.
+ * @member
+ * @property {string} titulo Titulo a poner en la Modal
+ * @property {state} isOpen Estado para determinar si la modal está abierta
+ * @property {function} changeModalState Función para cambiar el valor de "isOpen"
+ * @property {object} children Contiene los campos del Formulario
+ */
 export const Modal = (props) => {
     const {
         titulo,

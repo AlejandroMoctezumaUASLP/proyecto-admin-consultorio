@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/Header/Header.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/Header/Header.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import { CardMedia } from "@mui/material";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import { Link } from "../Link";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+const routes = [ 
+  {
+    link: "/consultorios",
+    name: "Consultorios"
+  },
+  {
+    link: "/medicos",
+    name: "Medicos"
+  },
+  {
+    link: "/consultas",
+    name: "Consultas"
+  }
+]
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
+
+/**
+ * Menú de navegación ubicado en la parte superior de la página
+ * @member
+ */
+export const Header = () => {
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  return (
+    &lt;AppBar position="static">
+      &lt;Container maxWidth="xl">
+        &lt;Toolbar disableGutters>
+          &lt;Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+          >
+            {/* &lt;Link to="/" style={{ textDecoration: 'none', color: 'white' }}>LOGO&lt;/Link> */}
+            &lt;Link link="/">
+              &lt;CardMedia
+                component="img"
+                height="80"
+                image="Logo.png"
+                alt="Paella dish"
+              />
+            &lt;/Link>
+
+            
+          &lt;/Typography>
+
+          &lt;Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            &lt;IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              &lt;MenuIcon />
+            &lt;/IconButton>
+            &lt;Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              {routes.map((item,key) => (
+                &lt;MenuItem key={key} onClick={handleCloseNavMenu}>
+                  &lt;Typography textAlign="center">&lt;Link link={item.link}>{item.name}&lt;/Link>&lt;/Typography>
+                &lt;/MenuItem>
+              ))}
+            &lt;/Menu>
+          &lt;/Box>
+          &lt;Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+          >
+            LOGO
+          &lt;/Typography>
+          &lt;Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {routes.map((item,key) => (
+              &lt;Button
+                key={key}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                &lt;Link link={item.link}>{item.name}&lt;/Link>
+              &lt;/Button>
+            ))}
+          &lt;/Box>
+
+          &lt;Box sx={{ flexGrow: 0 }}>
+            &lt;Tooltip title="Open settings">
+              &lt;IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                &lt;Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              &lt;/IconButton>
+            &lt;/Tooltip>
+            &lt;Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                &lt;MenuItem key={setting} onClick={handleCloseNavMenu}>
+                  &lt;Typography textAlign="center">{setting}&lt;/Typography>
+                &lt;/MenuItem>
+              ))}
+            &lt;/Menu>
+          &lt;/Box>
+        &lt;/Toolbar>
+      &lt;/Container>
+    &lt;/AppBar>
+  );
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#CardConsulta">CardConsulta</a></li><li><a href="global.html#CardConsultorio">CardConsultorio</a></li><li><a href="global.html#CardDoctor">CardDoctor</a></li><li><a href="global.html#ConsultasPage">ConsultasPage</a></li><li><a href="global.html#ConsultorioPage">ConsultorioPage</a></li><li><a href="global.html#CrudConsultorios">CrudConsultorios</a></li><li><a href="global.html#CrudMedicos">CrudMedicos</a></li><li><a href="global.html#DropdownForm">DropdownForm</a></li><li><a href="global.html#FooterComponent">FooterComponent</a></li><li><a href="global.html#FormModal">FormModal</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#itemContext">itemContext</a></li><li><a href="global.html#Link">Link</a></li><li><a href="global.html#MainPage">MainPage</a></li><li><a href="global.html#MDrawer">MDrawer</a></li><li><a href="global.html#MedicoPage">MedicoPage</a></li><li><a href="global.html#Modal">Modal</a></li><li><a href="global.html#SubmitButton">SubmitButton</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Dec 08 2021 14:57:12 GMT-0600 (hora estándar central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
