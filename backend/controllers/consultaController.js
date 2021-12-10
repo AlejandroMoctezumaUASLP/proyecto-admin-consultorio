@@ -99,5 +99,27 @@ module.exports = {
         res.status(200).json({
             result
         });
+    },
+    changePrioridadAppointment: async (req, res) => {
+        const {
+            prioridad,
+        } = req.body;
+
+        const id = req.params.id;
+        const result = await consultaService.changePriority(id, prioridad);
+
+        res.status(200).json({
+            result
+        });
+    },
+    cancelAppointment: async (req, res) => {
+        const { id_active } = req.body;
+
+        const id = req.params.id
+        const result = await consultaService.changeIsActive(id, id_active);
+
+        res.status(200).json({
+            result
+        })
     }
 }

@@ -55,6 +55,11 @@ const eventSchema = mongoose.Schema({
             'Falta la hora'
         ],
     },
+    is_active: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
     paciente: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Paciente"

@@ -3,7 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
-const { pacienteController, medicoController, consultorioController, consultaController } = require('./controllers');
+const {pacienteController, medicoController, consultorioController, consultaController} = require('./controllers');
 require('dotenv').config()
 
 app.use(bodyParser());
@@ -14,16 +14,16 @@ const router = express.Router();
 
 // Se inicia la conexión con la BD en Mongo
 mongoose
-  .connect(
-    //"mongodb://127.0.0.1:27017/doctores"
-    process.env.MONGO_CONNECTION_STRING
-  )
-  .then(() => {
-    console.log("Connected to database!");
-  })
-  .catch(() => {
-    console.log("Connection failed!");
-  });
+    .connect(
+        //"mongodb://127.0.0.1:27017/doctores"
+        process.env.MONGO_CONNECTION_STRING
+    )
+    .then(() => {
+        console.log("Connected to database!");
+    })
+    .catch(() => {
+        console.log("Connection failed!");
+    });
 
 // CRUD de Pacientes
 router.post("/pacientes", pacienteController.createPatient);
@@ -52,11 +52,13 @@ router.get("/consultas/:id", consultaController.findAppointment);
 router.get("/consultas", consultaController.getAppointments);
 router.put("/consultas/:id", consultaController.updateAppointment);
 router.delete("/consultas/:id", consultaController.deleteAppointment);
+router.put("/consultas/:id/prioridad", consultaController.changePrioridadAppointment);
+router.put("/consultas/:id/cancel", consultaController.cancelAppointment);
 
 // Se pasa router al api
-app.use('/api',router);
+app.use('/api', router);
 
 // Se inicia el servicio en el puerto 8000
 app.listen(8000, () => {
-  console.log('Listening port: 8000');
+    console.log('Listening port: 8000');
 });
