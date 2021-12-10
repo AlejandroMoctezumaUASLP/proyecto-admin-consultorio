@@ -37,25 +37,28 @@ module.exports = {
         });
     },
     findOffice: async (req, res) => {
-        const id = req.params.id;
-        const include = req.query["include"];
+        let include = ""
+        include += req.query["include"];
         let arrayInclude = "";
+        console.log(typeof include + include)
         if (include)
-            arrayInclude = include.replaceAll(".", " ");
+            include = include.split(".").join(" ")
 
-        const result = await consultorioService.getById(id, arrayInclude);
+        const result = await consultorioService.getById(id, include);
 
         res.status(200).json({
             result
         });
     },
     getOffices: async (req, res) => {
-        const include = req.query["include"];
+        let include = ""
+        include += req.query["include"];
         let arrayInclude = "";
+        console.log(typeof include + include)
         if (include)
-            arrayInclude = include.replaceAll(".", " ");
+            include = include.split(".").join(" ")
 
-        const result = await consultorioService.getAll(arrayInclude);
+        const result = await consultorioService.getAll(include);
 
         res.status(200).json({
             result

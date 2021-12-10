@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 // const { medicoSchema } = require('./medico');
 // const { pacienteSchema } = require('./paciente');
 
+
 /**
  * Schema de Consulta.
  * 
@@ -19,9 +20,10 @@ const eventSchema = mongoose.Schema({
     numero_turno: {
         type: Number,
         required: [
-            true,
+            false,
             'Falta el turno'
         ],
+        default: Math.floor(Math.random() * 30)
     },
     consultorio: {
         type: mongoose.Schema.Types.ObjectId,
