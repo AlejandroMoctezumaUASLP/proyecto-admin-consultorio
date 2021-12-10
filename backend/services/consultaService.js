@@ -11,5 +11,5 @@ module.exports = {
     update: async (_id, body) => Consulta.findByIdAndUpdate(_id,body),
     delete: async (id) => Consulta.findByIdAndRemove(id),
     changePriority: async (id, prioridad) => Consulta.findByIdAndUpdate(id, {prioridad: prioridad}),
-    changeIsActive: async (id, is_active) => Consulta.findByIdAndUpdate(id, is_active)
+    changeIsActive: async (id, is_active) => Consulta.findByIdAndUpdate(id, {is_active: is_active})
 }
