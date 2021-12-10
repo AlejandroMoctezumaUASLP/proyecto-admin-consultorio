@@ -59,6 +59,7 @@ router.put("/consultas/:id/cancel", consultaController.cancelAppointment);
 app.use('/api', router);
 
 // Se inicia el servicio en el puerto 8000
-app.listen(8000, () => {
-    console.log('Listening port: 8000');
+app.listen(process.env.PORT || 80, () => {
+    console.log('Listening port: 3000');
 });
+

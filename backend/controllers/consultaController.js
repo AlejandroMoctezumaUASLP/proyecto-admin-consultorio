@@ -43,24 +43,29 @@ module.exports = {
     },
     findAppointment: async (req, res) => {
         const id = req.params.id;
-        const include = req.query["include"];
+        let include = ""
+        include += req.query["include"];
         let arrayInclude = "";
+        console.log(typeof include + include)
         if (include)
-            arrayInclude = include.replaceAll("."," ");
+            include = include.split(".").join(" ")
 
-        const result = await consultaService.getById({_id: id}, arrayInclude);
+
+        const result = await consultaService.getById({_id: id}, include);
 
         res.status(200).json({
             result
         });
     },
     getAppointments: async (req, res) => {
-        const include = req.query["include"];
+        let include = ""
+        include += req.query["include"];
         let arrayInclude = "";
+        console.log(typeof include + include)
         if (include)
-            arrayInclude = include.replaceAll("."," ");
+            include = include.split(".").join(" ")
 
-        const result = await consultaService.getAll(arrayInclude);
+        const result = await consultaService.getAll(include);
 
         res.status(200).json({
             result

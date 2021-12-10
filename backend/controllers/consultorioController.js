@@ -1,8 +1,8 @@
-const { consultorioService } = require('../services');
+const {consultorioService} = require('../services');
 
 /**
  * Implementa los controladores de las rutas de /consultorios:
- * 
+ *
  * <ul style="list-style: none;">
  *  <li> createOffice: Crea un consultorio
  *  <li> findOffice: Busca en base a un ID. También se pueden remplazar los IDs anidados por un objeto
@@ -41,7 +41,7 @@ module.exports = {
         const include = req.query["include"];
         let arrayInclude = "";
         if (include)
-            arrayInclude = include.replaceAll("."," ");
+            arrayInclude = include.replaceAll(".", " ");
 
         const result = await consultorioService.getById(id, arrayInclude);
 
@@ -53,8 +53,8 @@ module.exports = {
         const include = req.query["include"];
         let arrayInclude = "";
         if (include)
-            arrayInclude = include.replaceAll("."," ");
-        
+            arrayInclude = include.replaceAll(".", " ");
+
         const result = await consultorioService.getAll(arrayInclude);
 
         res.status(200).json({
