@@ -53,7 +53,7 @@ router.get("/consultas", consultaController.getAppointments);
 router.put("/consultas/:id", consultaController.updateAppointment);
 router.delete("/consultas/:id", consultaController.deleteAppointment);
 router.put("/consultas/:id/prioridad", consultaController.changePrioridadAppointment);
-router.put("/consultas/:id/cancel", consultaController.cancelAppointment);
+router.put("/consultas/:id/state", consultaController.changeAppointmentState);
 
 // Se pasa router al api
 app.use('/api', router);

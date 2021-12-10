@@ -117,11 +117,11 @@ module.exports = {
             result
         });
     },
-    cancelAppointment: async (req, res) => {
-        const { id_active } = req.body;
+    changeAppointmentState: async (req, res) => {
+        const { is_active } = req.body;
 
         const id = req.params.id
-        const result = await consultaService.changeIsActive(id, id_active);
+        const result = await consultaService.changeIsActive(id, is_active);
 
         res.status(200).json({
             result
